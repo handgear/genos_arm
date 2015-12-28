@@ -63,25 +63,9 @@ void loop() {
       servo1.write(pos+DELTA);
       pos=pos+DELTA;
     }
-    
     delay(300);//time for servo to move
     while(pin_sw4==0);//prevent double movment
   }
 
-  
 }
 
-/*
-analogWrite(pin_LED1, 100);//0~255
-
-  for(int i=0;i<=255;i++)
-  {
-    analogWrite(pin_LED1, i);
-    delay(5);
-  }
-  for(int i=255;i>0;i--)
-  {
-    analogWrite(pin_LED1, i);
-    delay(5);
-  } 
-*/
