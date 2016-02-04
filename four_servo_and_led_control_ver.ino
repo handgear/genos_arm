@@ -6,10 +6,10 @@
 #define SERVO_PIN_4 5
 #define LED_SW 11
 #define SERVO_SW 12
-#define FADE_VAL 5
+
 
 Servo servo1, servo2, servo3, servo4;
-
+int fadeValue = 5;
 int brightness = 0;    
 bool ledSwitch = false;
 bool servoSwitch = false;  
@@ -49,10 +49,10 @@ void loop() {
 void dimmingLed(){
   analogWrite(LED_PIN, brightness);
 
-  brightness = brightness + FADE_VAL;
+  brightness = brightness + fadeValue;
 
   if (brightness == 0 || brightness == 255) {
-    FADE_VAL = -FADE_VAL ;
+    fadeValue = -fadeValue ;
   }
   delay(25);
 }
