@@ -1,5 +1,5 @@
 #include <Servo.h> 
-#define LED_PIN 9
+#define LED_PIN 6
 #define SERVO_PIN_1 2
 #define SERVO_PIN_2 3
 #define SERVO_PIN_3 4
@@ -17,6 +17,7 @@ int servo1Pos = 30;
 int servo2Pos = 60;
 int servo3Pos = 90;
 int servo4Pos = 120;
+int servoToggle = 0;
 
 void setup() {
   pinMode(LED_PIN, OUTPUT);
@@ -34,27 +35,52 @@ void setup() {
 }
 
 void loop() {
-  checkSwitch();
 
-  if(ledSwitch == true){
+  if(digitalRead(LED_SW) == LOW){//ledSwitch == true
     dimmingLed();
-  } 
-  if(servoSwitch == true){
-    servoOn();  
-  }else if(servoSwitch == false){
-    servoOff();
   }
+  else
+    analogWrite(LED_PIN, 0);
+
+  if(digitalRead(SERVO_SW) == LOW){
+    servo1.write(90);//value 10 for test
+    servo2.write(90);
+    servo3.write(90);
+    servo4.write(90);
+
+    delay(200);
+  }
+  if(digitalRead(SERVO_SW) == HIGH){
+    servo1.write(170);//value 10 for test
+    servo2.write(170);
+    servo3.write(170);
+    servo4.write(170);
+    delay(200);
+  }
+
+
+  // if(servoSwitch == true && servoToggle == 0){
+  //   servoOn();  
+  //   servoToggle = 1;
+  // }else if(servoSwitch == false && servoToggle == 0){
+  //   servoOff();
+  //   servoToggle = 1;
+  // }
 
 }
+
 void dimmingLed(){
-  analogWrite(LED_PIN, brightness);
-
-  brightness = brightness + fadeValue;
-
-  if (brightness == 0 || brightness == 255) {
-    fadeValue = -fadeValue ;
+  for(int i=0; i<255; i++){
+    analogWrite(LED_PIN, i);
+    delay(5);
   }
-  delay(25);
+  
+  // brightness = brightness + fadeValue;
+
+  // if (brightness == 0 || brightness == 255) {
+  //   fadeValue = -fadeValue ;
+  // }
+  // delay(25);
 }
 void checkSwitch(){
   // ledSwitch = false;
@@ -64,10 +90,19 @@ void checkSwitch(){
   }else if(digitalRead(LED_SW) == LOW && ledSwitch == true){
     ledSwitch = false;
   }
+
   if(digitalRead(SERVO_SW) == LOW && servoSwitch == false){
-    servoSwitch = true; 
+    delay(200);
+    if(digitalRead(SERVO_SW) == LOW && servoSwitch == false){
+     servoSwitch = true; 
+     servoToggle = 0;
+    }
   }else if(digitalRead(SERVO_SW) == LOW && servoSwitch == true){
-    servoSwitch = false;
+    delay(200);
+    if(digitalRead(SERVO_SW) == LOW && servoSwitch == true){
+      servoSwitch = false;
+      servoToggle = 0;
+    }
   }
   delay(200);//prevennt debouncing
 }
